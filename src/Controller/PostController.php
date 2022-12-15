@@ -3,9 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
+use DateTimeImmutable;
+use DateTimeZone;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,11 +52,29 @@ class PostController extends AbstractController
         ]); 
     }
 
-    #[Route('/post/{id<[0-9]+>}')]
-    public function show(Post $post): Response
+    #[Route('/post/{id<[0-9]+>}', name:'show')]
+    public function show(Post $post, Request $request, EntityManagerInterface $em): Response
     {
+        if($this->getUser()){
+            $comment = new Comment();
+            $comment->setPost($post);
+
+            $form = $this->createForm(CommentType::class, $comment);
+
+            
+            $form->handleRequest($request);
+            if($form->isSubmitted()){
+                $comment->setCreatedAt(new DateTimeImmutable())
+                        ->setUser($this->getUser());
+                $em->persist($comment);
+                $em->flush();
+
+                return $this->redirectToRoute('show',['id' => $post->getid()]);
+            }
+        }
         return $this->render('home/show.html.twig', [
-            'post' => $post
+            'post' => $post,
+            "commentform" => isset($form) ? $form : null
         ]);
     }
 }

@@ -1,10 +1,12 @@
-{% extends "base.html.twig" %}
+{% extends "base.html.twig"
+ %}
 
 {% block body %}
+
     <div>
-				<div class="card mb-3">
+				<div class="card mb-3" >
 					<h3 class="card-header">{{ post.title }}</h3>
-                    <img src="{{ post.image }}" alt="{{ post.title }}">
+                    <img style="width: 25%;" src="{{ post.image }}" alt="{{ post.title }}">
 					<div class="card-body">
 						<p class="card-text">{{ post.description}}</p>
 					</div>
@@ -15,5 +17,8 @@
 						{{ post.createdAt | date('d/m/Y') }}
 					</div>
 				</div>
+			</div>
+			<div class="container">
+				{% include('home/comment.html.twig') %}
 			</div>
 {% endblock %}

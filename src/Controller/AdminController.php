@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 // #[isGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
